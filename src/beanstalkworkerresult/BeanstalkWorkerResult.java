@@ -78,6 +78,9 @@ public class BeanstalkWorkerResult
             {
                 status = rs.getString(1);
             }
+            
+            pSt.close();
+            rs.close();
         }
         catch(SQLException sqlE) {}
         
@@ -118,6 +121,8 @@ public class BeanstalkWorkerResult
             if(rs.next())
                 id = rs.getInt(1);
             
+            pSt.close();
+            rs.close();
         }
         catch (SQLException ex) 
         {
@@ -152,6 +157,7 @@ public class BeanstalkWorkerResult
                 pSt.setLong(3, lNow);
                 pSt.setInt(4, databaseID);
                 pSt.execute();
+                pSt.close();
             }   
             else
             {
@@ -168,6 +174,7 @@ public class BeanstalkWorkerResult
                 pSt.setDate(2,      date);
                 pSt.setInt(3,       md5ID);
                 pSt.execute();
+                pSt.close();
             }
             
         }
@@ -230,8 +237,9 @@ public class BeanstalkWorkerResult
             // for each job: 
             while(m_bRun)
             {
-                System.out.println("runWorker: waiting for job.");
+                // System.out.println("runWorker: waiting for job.");
                 Job j = stem.reserve();
+                
                 System.out.println("job received.");
                 stem.delete(j);
                 runJob(j);
